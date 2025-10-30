@@ -10,7 +10,7 @@ from yolox.exp import Exp as MyExp
 class Exp(MyExp):
     def __init__(self):
         super(Exp, self).__init__()
-        # Model architecture
+        # Model architecture - Optimized for YOLOX-Nano
         self.depth = 0.33
         self.width = 0.25
         self.input_size = (480, 480)
@@ -18,7 +18,7 @@ class Exp(MyExp):
         self.mosaic_scale = (0.5, 1.5)
         self.test_size = (480, 480)
         self.mosaic_prob = 0.5
-        self.enable_mixup = False  # Nano model uses False for better performance
+        self.enable_mixup = False  # Disabled for small Nano model
         self.exp_name = os.path.split(os.path.realpath(__file__))[1].split(".")[0]
 
         # Dataset - Single food class
@@ -27,10 +27,10 @@ class Exp(MyExp):
         self.train_ann = "instances_train2017.json"
         self.val_ann = "instances_val2017.json"
 
-        # Training settings
-        self.max_epoch = 1  # Test with 1 epoch
+        # Training settings - Optimized for Nano model
+        self.max_epoch = 100  # 100 epochs sufficient for Nano
         self.data_num_workers = 4
-        self.eval_interval = 1
+        self.eval_interval = 5  # Evaluate every 5 epochs
         self.print_interval = 10
 
         # Optimizer settings
@@ -75,4 +75,3 @@ class Exp(MyExp):
         self.model.apply(init_yolo)
         self.model.head.initialize_biases(1e-2)
         return self.model
-
